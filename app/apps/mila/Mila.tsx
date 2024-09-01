@@ -2,7 +2,7 @@
 
 import React, { useState, useRef, useEffect, useCallback } from "react";
 import { motion } from "framer-motion";
-import { db } from "../../../lib/firebase";
+import { db } from "@/lib/firebase";
 import { ref, onValue, set, push, update, remove } from "firebase/database";
 import ContextMenu from "../../../contexts/ContextMenu";
 import TextBox from "./components/TextBox";
