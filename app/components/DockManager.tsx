@@ -23,6 +23,19 @@ const DockManager: React.FC<DockManagerProps> = ({ toggleApp }) => {
   const dockScale = useSpring(0.5, springConfig);
   const [windowWidth, setWindowWidth] = useState(0);
 
+  // Create an array of transform functions for each app icon
+  const iconScales = appDefinitions.map((_, index) =>
+    useTransform(mouseX, (value) => {
+      const iconCenter =
+        windowWidth / 2 +
+        (index - appDefinitions.length / 2 + 0.5) * (DOCK_SIZE + DOCK_PADDING);
+      const distance = Math.abs(value - iconCenter);
+      return distance < MAGNIFICATION_RANGE
+        ? 1 + (MAGNIFICATION - 1) * (1 - distance / MAGNIFICATION_RANGE)
+        : 1;
+    })
+  );
+
   useEffect(() => {
     setWindowWidth(window.innerWidth);
     const updateMouse = (e: MouseEvent) => {
@@ -59,17 +72,7 @@ const DockManager: React.FC<DockManagerProps> = ({ toggleApp }) => {
             style={{
               width: DOCK_SIZE,
               height: DOCK_SIZE,
-              scale: useTransform(mouseX, (value) => {
-                const iconCenter =
-                  windowWidth / 2 +
-                  (index - appDefinitions.length / 2 + 0.5) *
-                    (DOCK_SIZE + DOCK_PADDING);
-                const distance = Math.abs(value - iconCenter);
-                return distance < MAGNIFICATION_RANGE
-                  ? 1 +
-                      (MAGNIFICATION - 1) * (1 - distance / MAGNIFICATION_RANGE)
-                  : 1;
-              }),
+              scale: iconScales[index], // Use the pre-computed scale
             }}
           >
             <Image
