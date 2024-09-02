@@ -1,7 +1,9 @@
+"use client";
+
 import React, { useState, useEffect } from "react";
 import { motion, useSpring, useMotionValue } from "framer-motion";
-import Image from "next/image";
 import { appDefinitions, AppDefinition } from "../types/AppTypes";
+import DockIcon from "./DockIcon";
 
 const DOCK_SIZE = 64;
 const DOCK_PADDING = 8;
@@ -44,46 +46,32 @@ const DockManager: React.FC<DockManagerProps> = ({ toggleApp }) => {
     };
   }, [mouseX, mouseY, dockY, dockScale]);
 
-  const calculateIconScale = (index: number, mouseXValue: number) => {
-    const iconCenter =
-      windowWidth / 2 +
-      (index - appDefinitions.length / 2 + 0.5) * (DOCK_SIZE + DOCK_PADDING);
-    const distance = Math.abs(mouseXValue - iconCenter);
-    return distance < MAGNIFICATION_RANGE
-      ? 1 + (MAGNIFICATION - 1) * (1 - distance / MAGNIFICATION_RANGE)
-      : 1;
-  };
-
   return (
     <motion.div
       className="fixed bottom-0 left-0 right-0 flex justify-center"
       style={{ y: dockY, scale: dockScale, transformOrigin: "bottom" }}
     >
       <div className="bg-opacity-24 flex items-end rounded-t-[19px] bg-black px-2 py-2 backdrop-blur-md">
-        {appDefinitions.map((app, index) => (
-          <motion.div
-            key={app.id}
-            className="mx-1"
-            style={{
-              width: DOCK_SIZE,
-              height: DOCK_SIZE,
-              scale: calculateIconScale(index, mouseX.get()),
-            }}
-          >
-            <Image
-              id={`dock-icon-${app.id}`}
-              src={app.icon}
-              alt={app.name}
-              width={DOCK_SIZE}
-              height={DOCK_SIZE}
-              className="cursor-pointer rounded-xl"
+        {appDefinitions.map((app, index) => {
+          const iconCenter =
+            windowWidth / 2 +
+            (index - appDefinitions.length / 2 + 0.5) * (DOCK_SIZE + DOCK_PADDING);
+          
+          return (
+            <DockIcon
+              key={app.id}
+              app={app}
               onClick={() => {
                 console.log(`Clicked ${app.id}`);
                 toggleApp(app.id);
               }}
+              mouseX={mouseX}
+              iconCenter={iconCenter}
+              magnification={MAGNIFICATION}
+              magnificationRange={MAGNIFICATION_RANGE}
             />
-          </motion.div>
-        ))}
+          );
+        })}
       </div>
     </motion.div>
   );
