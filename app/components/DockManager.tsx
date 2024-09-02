@@ -1,8 +1,6 @@
-"use client";
-
-import React, { useState, useEffect, useMemo, useCallback } from "react";
+import React, { useState, useEffect } from "react";
+import { motion, useSpring, useMotionValue } from "framer-motion";
 import Image from "next/image";
-import { motion, useSpring, useTransform, useMotionValue } from "framer-motion";
 import { appDefinitions, AppDefinition } from "../types/AppTypes";
 
 const DOCK_SIZE = 64;
@@ -22,23 +20,6 @@ const DockManager: React.FC<DockManagerProps> = ({ toggleApp }) => {
   const dockY = useSpring(100, springConfig);
   const dockScale = useSpring(0.5, springConfig);
   const [windowWidth, setWindowWidth] = useState(0);
-
-  // Create an array of transform functions for each app icon
-  const iconScales = useMemo(() => {
-    return appDefinitions.map((_, index) => {
-      const transform = useTransform(mouseX, (value) => {
-        const iconCenter =
-          windowWidth / 2 +
-          (index - appDefinitions.length / 2 + 0.5) *
-            (DOCK_SIZE + DOCK_PADDING);
-        const distance = Math.abs(value - iconCenter);
-        return distance < MAGNIFICATION_RANGE
-          ? 1 + (MAGNIFICATION - 1) * (1 - distance / MAGNIFICATION_RANGE)
-          : 1;
-      });
-      return transform;
-    });
-  }, [mouseX, windowWidth]);
 
   useEffect(() => {
     setWindowWidth(window.innerWidth);
@@ -63,6 +44,16 @@ const DockManager: React.FC<DockManagerProps> = ({ toggleApp }) => {
     };
   }, [mouseX, mouseY, dockY, dockScale]);
 
+  const calculateIconScale = (index: number, mouseXValue: number) => {
+    const iconCenter =
+      windowWidth / 2 +
+      (index - appDefinitions.length / 2 + 0.5) * (DOCK_SIZE + DOCK_PADDING);
+    const distance = Math.abs(mouseXValue - iconCenter);
+    return distance < MAGNIFICATION_RANGE
+      ? 1 + (MAGNIFICATION - 1) * (1 - distance / MAGNIFICATION_RANGE)
+      : 1;
+  };
+
   return (
     <motion.div
       className="fixed bottom-0 left-0 right-0 flex justify-center"
@@ -76,7 +67,7 @@ const DockManager: React.FC<DockManagerProps> = ({ toggleApp }) => {
             style={{
               width: DOCK_SIZE,
               height: DOCK_SIZE,
-              scale: iconScales[index], // Use the pre-computed scale
+              scale: calculateIconScale(index, mouseX.get()),
             }}
           >
             <Image
