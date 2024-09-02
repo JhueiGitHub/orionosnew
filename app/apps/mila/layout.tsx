@@ -10,5 +10,5 @@ export default function MilaLayout({
 }: {
   children: React.ReactNode;
 }) {
-  return { children };
+  return <>{children}</>;
 }

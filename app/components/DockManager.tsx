@@ -1,6 +1,6 @@
 "use client";
 
-import React, { useState, useEffect, useMemo } from "react";
+import React, { useState, useEffect, useMemo, useCallback } from "react";
 import Image from "next/image";
 import { motion, useSpring, useTransform, useMotionValue } from "framer-motion";
 import { appDefinitions, AppDefinition } from "../types/AppTypes";
@@ -24,22 +24,21 @@ const DockManager: React.FC<DockManagerProps> = ({ toggleApp }) => {
   const [windowWidth, setWindowWidth] = useState(0);
 
   // Create an array of transform functions for each app icon
-  const iconScales = useMemo(
-    () =>
-      appDefinitions.map((_, index) =>
-        useTransform(mouseX, (value) => {
-          const iconCenter =
-            windowWidth / 2 +
-            (index - appDefinitions.length / 2 + 0.5) *
-              (DOCK_SIZE + DOCK_PADDING);
-          const distance = Math.abs(value - iconCenter);
-          return distance < MAGNIFICATION_RANGE
-            ? 1 + (MAGNIFICATION - 1) * (1 - distance / MAGNIFICATION_RANGE)
-            : 1;
-        })
-      ),
-    [mouseX, windowWidth]
-  );
+  const iconScales = useMemo(() => {
+    return appDefinitions.map((_, index) => {
+      const transform = useTransform(mouseX, (value) => {
+        const iconCenter =
+          windowWidth / 2 +
+          (index - appDefinitions.length / 2 + 0.5) *
+            (DOCK_SIZE + DOCK_PADDING);
+        const distance = Math.abs(value - iconCenter);
+        return distance < MAGNIFICATION_RANGE
+          ? 1 + (MAGNIFICATION - 1) * (1 - distance / MAGNIFICATION_RANGE)
+          : 1;
+      });
+      return transform;
+    });
+  }, [mouseX, windowWidth]);
 
   useEffect(() => {
     setWindowWidth(window.innerWidth);

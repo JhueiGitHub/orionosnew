@@ -1,4 +1,3 @@
-/** @type {import('next').NextConfig} */
 const nextConfig = {
   webpack: (config) => {
     config.externals.push({
@@ -6,7 +5,6 @@ const nextConfig = {
       bufferutil: "commonjs bufferutil",
       canvas: "commonjs canvas",
     });
-    // config.infrastructureLogging = { debug: /PackFileCache/ };
     return config;
   },
   images: {
@@ -21,11 +19,6 @@ const nextConfig = {
   typescript: {
     ignoreBuildErrors: true,
   },
-  experimental: {
-    nftTracing: true,
-    appDir: true,
-  },
-  pageextensions: ["tsx", "ts", "jsx", "js"],
 };
 
 export default nextConfig;
