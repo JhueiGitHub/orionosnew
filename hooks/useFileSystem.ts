@@ -2,7 +2,7 @@
 
 import { useState, useEffect, useCallback } from "react";
 import { ref, onValue, push, set, remove, update } from "firebase/database";
-import { db } from "../lib/firebase";
+import { db } from "../lib/db";
 import { FileSystemItem } from "@/app/types/FileSystem";
 
 export const useFileSystem = () => {
