@@ -112,7 +112,6 @@ const Mila: React.FC = () => {
     } else if (e.key === "/") {
       setIsCommandMenuVisible(true);
       setCurrentCommand("/");
-      e.preventDefault();
     } else if (isCommandMenuVisible) {
       if (
         e.key === "Tab" &&
@@ -260,15 +259,16 @@ const Mila: React.FC = () => {
       initial={{ opacity: 0, scale: 0.9 }}
       animate={{ opacity: 1, scale: 1 }}
       exit={{ opacity: 0, scale: 0.9 }}
+      className="relative h-full w-full overflow-hidden opacity-30"
     >
-      <div className="h-[500px] w-[500px]">
+      <div className="absolute inset-0 overflow-hidden">
         <video
           ref={videoRef}
           autoPlay
           loop
           muted
           playsInline
-          className="absolute bottom-0 left-0 w-full object-cover opacity-30"
+          className="relative h-full w-full overflow-hidden opacity-30"
           style={{ transform: "translateY(45%)" }}
         >
           <source src="/media/bh.mp4" type="video/mp4" />

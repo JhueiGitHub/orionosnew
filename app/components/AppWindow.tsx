@@ -117,8 +117,8 @@ const Window: React.FC<WindowProps> = ({ id, title, appName, onClose }) => {
           pointerEvents: isMinimizing ? "none" : "auto",
         }}
       >
-        <div className="w-full h-full flex flex-col bg-black bg-opacity-80 rounded-lg overflow-hidden shadow-2xl border border-gray-700">
-          <div className="px-4 py-2 flex justify-between items-center bg-gray-900">
+        <div className="w-full h-full flex flex-col bg-black bg-opacity-80 rounded-lg overflow-hidden shadow-2xl border border-gray-900">
+          <div className="px-4 py-2 flex justify-between items-center bg-black bg-opacity-30">
             <div className="flex items-center space-x-2">
               <button
                 onClick={handleMinimize}
@@ -130,7 +130,12 @@ const Window: React.FC<WindowProps> = ({ id, title, appName, onClose }) => {
               />
               <button className="w-3 h-3 rounded-full bg-green-500" />
             </div>
-            <h2 className="text-white text-sm font-medium">{title}</h2>
+            <h2
+              className="text-white text-sm font-medium"
+              style={{ fontFamily: "ExemplarPro" }}
+            >
+              {title}
+            </h2>
             <div className="w-14"></div>
           </div>
           <div className="flex-1 overflow-auto">

@@ -10,5 +10,5 @@ export default function MilaLayout({
 }: {
   children: React.ReactNode;
 }) {
-  return <>{children}</>;
+  return <div className="h-full w-full overflow-hidden">{children}</div>;
 }

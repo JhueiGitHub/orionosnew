@@ -1,6 +1,7 @@
 import React from "react";
 import { motion } from "framer-motion";
 import { FileSystemItem } from "@/app/types/FileSystem";
+import "@/app/globals.css";
 
 interface SidebarProps {
   favorites: FileSystemItem[];
@@ -14,7 +15,7 @@ const Sidebar: React.FC<SidebarProps> = ({
   onRemoveFromFavorites,
 }) => {
   return (
-    <div className="p-4">
+    <div className="flex flex-col p-4 h-full">
       <h2 className="text-white font-semibold mb-4">Favorites</h2>
       {favorites.map((folder) => (
         <motion.div
@@ -24,7 +25,7 @@ const Sidebar: React.FC<SidebarProps> = ({
           onClick={() => onNavigate(folder.id)}
         >
           <img src="/media/folder.png" alt="Folder" className="w-6 h-6 mr-2" />
-          <span className="text-gray-300 text-sm">{folder.name}</span>
+          <span className="text-gray-300 text-sm flex-grow">{folder.name}</span>
           <button
             className="ml-auto text-gray-500 hover:text-red-500"
             onClick={(e) => {

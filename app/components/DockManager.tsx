@@ -7,7 +7,7 @@ import DockIcon from "./DockIcon";
 
 const DOCK_SIZE = 64;
 const DOCK_PADDING = 8;
-const MAGNIFICATION = 2;
+const MAGNIFICATION = 1.4; // Reduced by 2.5 times from 2
 const MAGNIFICATION_RANGE = 150;
 const PROXIMITY_THRESHOLD = 150;
 

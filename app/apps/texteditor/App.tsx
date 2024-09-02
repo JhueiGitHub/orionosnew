@@ -5,7 +5,6 @@ import { ref, onValue, push, update, remove } from "firebase/database";
 import TextBox from "./components/TextBox";
 import ContextMenu from "./components/ContextMenu";
 
-
 interface TextBoxData {
   id: string;
   text: string;
@@ -29,15 +28,17 @@ const TextEditor: React.FC = () => {
   const [currentStyle, setCurrentStyle] = useState<TextBoxData["style"]>({
     fontFamily: "Dank Mono",
     fontStyle: "italic",
-    color: "#748393"
+    color: "#748393",
   });
   const [isExemplarMode, setIsExemplarMode] = useState(false);
   const canvasRef = useRef<HTMLDivElement>(null);
   const inputRef = useRef<HTMLInputElement>(null);
-  const [contextMenu, setContextMenu] = useState<{ x: number; y: number } | null>(null);
+  const [contextMenu, setContextMenu] = useState<{
+    x: number;
+    y: number;
+  } | null>(null);
   const [inputWidth, setInputWidth] = useState(1);
   const measureRef = useRef<HTMLSpanElement>(null);
-
 
   useEffect(() => {
     const textBoxesRef = ref(db, "textEditor/textBoxes");
@@ -107,7 +108,7 @@ const TextEditor: React.FC = () => {
 
   const handleInputChange = (e: React.ChangeEvent<HTMLInputElement>) => {
     const newText = e.target.value;
-    
+
     if (newText.endsWith("/exemplar")) {
       setIsExemplarMode(true);
       setCurrentStyle({
@@ -137,11 +138,14 @@ const TextEditor: React.FC = () => {
     }
   };
 
-  const handleTextBoxDrag = useCallback((id: string, newPosition: { x: number; y: number }) => {
-    const updates: { [key: string]: any } = {};
-    updates[`/textEditor/textBoxes/${id}/position`] = newPosition;
-    update(ref(db), updates);
-  }, []);
+  const handleTextBoxDrag = useCallback(
+    (id: string, newPosition: { x: number; y: number }) => {
+      const updates: { [key: string]: any } = {};
+      updates[`/textEditor/textBoxes/${id}/position`] = newPosition;
+      update(ref(db), updates);
+    },
+    []
+  );
 
   const handleContextMenu = (e: React.MouseEvent) => {
     e.preventDefault();
@@ -164,7 +168,7 @@ const TextEditor: React.FC = () => {
       initial={{ opacity: 0, scale: 0.9 }}
       animate={{ opacity: 1, scale: 1 }}
       exit={{ opacity: 0, scale: 0.9 }}
-      className="relative h-full w-full overflow-hidden bg-[#14181F]"
+      className="relative h-full w-full overflow-hidden opacity-30"
       onContextMenu={handleContextMenu}
     >
       <div className="absolute inset-0 overflow-hidden">
@@ -173,7 +177,7 @@ const TextEditor: React.FC = () => {
           loop
           muted
           playsInline
-          className="absolute bottom-0 left-0 w-full object-cover opacity-30"
+          className="absolute bottom-0 left-0 w-full object-cover opacity-20"
           style={{ transform: "translateY(45%)" }}
         >
           <source src="/media/bh.mp4" type="video/mp4" />
@@ -203,18 +207,18 @@ const TextEditor: React.FC = () => {
               style={{
                 ...currentStyle,
                 width: `${inputWidth}px`,
-                minWidth: '1ch',
+                minWidth: "1ch",
               }}
               autoFocus
             />
             <span
               ref={measureRef}
               style={{
-                position: 'absolute',
-                top: '-9999px',
-                left: '-9999px',
-                visibility: 'hidden',
-                whiteSpace: 'pre',
+                position: "absolute",
+                top: "-9999px",
+                left: "-9999px",
+                visibility: "hidden",
+                whiteSpace: "pre",
                 ...currentStyle,
               }}
             >
